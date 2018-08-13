@@ -84,43 +84,43 @@ from scipy.stats import *
 # ani.save(maplet[Algorithm]+'_dynamics'+str(NumOfPlayers)+'.mp4', writer=writer)
 ################################################################################
 NumOfPlayers = 60
-Algorithm = 'joint_actions'
+Algorithm = ['joint_actions', 'mean_field']
 Iters = 60
-Steps = 200
+Steps = 1
 maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
 experiments_times = 30
-experiments = {'num_finish': [], 'wall_crash': [], 'conflicts': []}
+experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}]*2
 task_indice = np.random.choice(6, NumOfPlayers)
-for exp in range(experiments_times):
-    env = Inventory(NumOfPlayers, Algorithm, IfSnippet=False, IfGoal=True, taskIndice=task_indice)
-    frames = []
-    frames.append(env.layout_)
-    print ('This is the experiment {}!'.format(exp))
-    for step in range(Steps):
-        print ('Step {}'.format(step))
-        print (frames[step])
-        for iters in range(Iters):
-            if iters == Iters - 1:
-                env.record_flag = True
-            rewards = env.__procudure__()
-            env.record_flag = False
+for i in range(len(Algorithm)):
+    for exp in range(experiments_times):
+        env = Inventory(NumOfPlayers, Algorithm[i], IfSnippet=False, IfGoal=True, taskIndice=task_indice)
+        frames = []
         frames.append(env.layout_)
-        env.update_start_states(env.states)
-        num_finish = sum([1 for tick in env.check_assignments() if tick])
-        print ('The number of successful assignments is {}.'.format(num_finish))
-        print ('The number of wall crash is {}.'.format(env.wall_crash))
-        print ('The number of conflicts is {}.\n'.format(env.conflicts))
-        if num_finish == 60:
-            experiments['num_finish'].append(step)
-            experiments['wall_crash'].append(env.wall_crash)
-            experiments['conflicts'].append(env.conflicts)
-            break
+        print ('This is the experiment {}!'.format(exp))
+        for step in range(Steps):
+            print ('Step {}'.format(step))
+            print (frames[step])
+            for iters in range(Iters):
+                if iters == Iters - 1:
+                    env.record_flag = True
+                rewards = env.__procudure__()
+                env.record_flag = False
+            frames.append(env.layout_)
+            env.update_start_states(env.states)
+            num_finish = sum([1 for tick in env.check_assignments() if tick])
+            print ('The number of successful assignments is {}.'.format(num_finish))
+            print ('The number of wall crash is {}.'.format(env.wall_crash))
+            print ('The number of conflicts is {}.\n'.format(env.conflicts))
+            if num_finish == 60:
+                experiments[i]['num_finish'].append(step)
+                experiments[i]['wall_crash'].append(env.wall_crash)
+                experiments[i]['conflicts'].append(env.conflicts)
+                break
 ################################################################################
 # plt.show()
-true_mus = {'num_finish': 50, 'wall_crash': 4, 'conflicts': 2}
-for name in experiments.keys():
-    true_mu = true_mus[name]
-    onesample_results = ttest_1samp(experiments[name], true_mu)
+# true_mus = {'num_finish': 50, 'wall_crash': 4, 'conflicts': 2}
+for name in experiments[0].keys():
+    onesample_results = ttest_rel(experiments[0][name], experiments[1][name])
     print ('This is the results of {}: {}.'.format(name, onesample_results))
 # matrix_onesample = [
 #     ['', 'Test Statistic', 'p-value'],
