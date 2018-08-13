@@ -86,7 +86,7 @@ from scipy.stats import *
 NumOfPlayers = 60
 Algorithm = ['joint_actions', 'mean_field']
 Iters = 60
-Steps = 1
+Steps = 200
 maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
 experiments_times = 30
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}]*2
