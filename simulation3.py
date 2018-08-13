@@ -13,13 +13,12 @@ from scipy.stats import *
 
 # np.random.seed(2)
 
-NumOfPlayers = 60
-Algorithm = 'mean_field'
-Iters = 60
-Steps = 200
-maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
-
 ################################################################################
+# NumOfPlayers = 60
+# Algorithm = 'joint_actions'
+# Iters = 60
+# Steps = 200
+# maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
 # task_indice = np.random.choice(6, NumOfPlayers)
 # env = Inventory(NumOfPlayers, Algorithm, IfSnippet=False, IfGoal=True, taskIndice=task_indice)
 # rewardsHistory = []
@@ -37,6 +36,11 @@ maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'
 # plt.xlabel('t')
 # plt.ylabel('Mean of Total Rewards')
 ################################################################################
+# NumOfPlayers = 60
+# Algorithm = 'joint_actions'
+# Iters = 60
+# Steps = 200
+# maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
 # task_indice = np.random.choice(6, NumOfPlayers)
 # env = Inventory(NumOfPlayers, Algorithm, IfSnippet=False, IfGoal=True, taskIndice=task_indice)
 # frames = []
@@ -79,10 +83,15 @@ maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'
 # ani = FuncAnimation(fig, update, frames=Steps, interval=10)
 # ani.save(maplet[Algorithm]+'_dynamics'+str(NumOfPlayers)+'.mp4', writer=writer)
 ################################################################################
+NumOfPlayers = 60
+Algorithm = 'joint_actions'
+Iters = 60
+Steps = 200
+maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
 experiments_times = 30
 experiments = {'num_finish': [], 'wall_crash': [], 'conflicts': []}
+task_indice = np.random.choice(6, NumOfPlayers)
 for exp in range(experiments_times):
-    task_indice = np.random.choice(6, NumOfPlayers)
     env = Inventory(NumOfPlayers, Algorithm, IfSnippet=False, IfGoal=True, taskIndice=task_indice)
     frames = []
     frames.append(env.layout_)
@@ -108,11 +117,11 @@ for exp in range(experiments_times):
             break
 ################################################################################
 # plt.show()
-true_mu = np.mean(experiments)
-
-onesample_results = ttest_1samp(experiments, true_mu)
-
-print (onesample_results)
+true_mus = {'num_finish': 50, 'wall_crash': 4, 'conflicts': 2}
+for name in experiments.keys():
+    true_mu = true_mus[name]
+    onesample_results = ttest_1samp(experiments[name], true_mu)
+    print ('This is the results of {}: {}.'.format(name, onesample_results))
 # matrix_onesample = [
 #     ['', 'Test Statistic', 'p-value'],
 #     ['Sample Data', onesample_results[0], onesample_results[1]]
