@@ -88,8 +88,8 @@ Algorithm = ['joint_actions', 'mean_field']
 Iters = 60
 Steps = 200
 maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
-experiments_times = 30
-experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}]*2
+experiments_times = 2
+experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}, {'num_finish': [], 'wall_crash': [], 'conflicts': []}]
 task_indice = np.random.choice(6, NumOfPlayers)
 for i in range(len(Algorithm)):
     for exp in range(experiments_times):
@@ -120,7 +120,7 @@ for i in range(len(Algorithm)):
 # plt.show()
 # true_mus = {'num_finish': 50, 'wall_crash': 4, 'conflicts': 2}
 for name in experiments[0].keys():
-    onesample_results = ttest_rel(experiments[0][name], experiments[1][name])
+    onesample_results = ttest_ind(experiments[0][name], experiments[1][name])
     print ('This is the results of {}: {}.'.format(name, onesample_results))
 # matrix_onesample = [
 #     ['', 'Test Statistic', 'p-value'],
