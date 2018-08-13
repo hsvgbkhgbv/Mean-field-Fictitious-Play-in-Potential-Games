@@ -88,7 +88,7 @@ Algorithm = ['joint_actions', 'mean_field']
 Iters = 60
 Steps = 200
 maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
-experiments_times = 2
+experiments_times = 50
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}, {'num_finish': [], 'wall_crash': [], 'conflicts': []}]
 task_indice = np.random.choice(6, NumOfPlayers)
 for i in range(len(Algorithm)):
