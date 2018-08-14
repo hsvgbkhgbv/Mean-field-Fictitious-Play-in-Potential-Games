@@ -11,7 +11,7 @@ from plotly.tools import FigureFactory as FF
 import pandas as pd
 from scipy.stats import *
 
-# np.random.seed(2)
+np.random.seed(2)
 
 ################################################################################
 # NumOfPlayers = 60
@@ -84,9 +84,9 @@ from scipy.stats import *
 # ani.save(maplet[Algorithm]+'_dynamics'+str(NumOfPlayers)+'.mp4', writer=writer)
 ################################################################################
 NumOfPlayers = 60
-Algorithm = ['joint_actions', 'mean_field']
+Algorithm = ['mean_field', 'joint_actions']
 Iters = 60
-Steps = 200
+Steps = 70
 maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
 experiments_times = 50
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}, {'num_finish': [], 'wall_crash': [], 'conflicts': []}]
@@ -97,17 +97,20 @@ for i in range(len(Algorithm)):
         frames = []
         frames.append(env.layout_)
         print ('This is the experiment {}!'.format(exp))
+        print(frames[-1])
         for step in range(Steps):
             print ('Step {}'.format(step))
-            print (frames[step])
+            env.reset_layout()
             for iters in range(Iters):
                 if iters == Iters - 1:
                     env.record_flag = True
                 rewards = env.__procudure__()
                 env.record_flag = False
+            env.update_layout()
             frames.append(env.layout_)
             env.update_start_states(env.states)
-            num_finish = sum([1 for tick in env.check_assignments() if tick])
+            num_finish = sum(env.check_assignments())
+            print (frames[-1])
             print ('The number of successful assignments is {}.'.format(num_finish))
             print ('The number of wall crash is {}.'.format(env.wall_crash))
             print ('The number of conflicts is {}.\n'.format(env.conflicts))
@@ -120,8 +123,8 @@ for i in range(len(Algorithm)):
 # plt.show()
 # true_mus = {'num_finish': 50, 'wall_crash': 4, 'conflicts': 2}
 for name in experiments[0].keys():
-    onesample_results = ttest_ind(experiments[0][name], experiments[1][name])
-    print ('This is the results of {}: {}.'.format(name, onesample_results))
+    twosample_results = ttest_ind(experiments[0][name], experiments[1][name])
+    print ('This is the results of {}: {}.'.format(name, twosample_results))
 # matrix_onesample = [
 #     ['', 'Test Statistic', 'p-value'],
 #     ['Sample Data', onesample_results[0], onesample_results[1]]

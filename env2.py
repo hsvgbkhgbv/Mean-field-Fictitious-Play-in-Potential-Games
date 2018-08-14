@@ -97,16 +97,12 @@ class Inventory:
       self.agents = [Agent(self.actionNum, self.agentType, i) for i in range(NumAgents)]
       racks = [(5, 5), (5, 10), (5, 15), (11, 5), (11, 10), (11, 15)]
       self.tasks = []
-      for i in range(NumAgents):
-          self.tasks.append(racks[taskIndice[i]])
+      for num in taskIndice: self.tasks.append(racks[num])
       self.assign_tasks()
 
   def assign_tasks(self):
-      # cnt = Counter()
       for i in range(len(self.agents)):
           self.agents[i].task = self.tasks[i]
-          # cnt[self.tasks[i]] += 1
-      # print (cnt.most_common(6))
 
   def if_duplicate(self, curr_pos):
       flag = False
@@ -120,27 +116,23 @@ class Inventory:
 
   def update_layout(self):
       for state in self.states:
-          # self.layout[state[0], state[1]] += 1
           self.layout_[state[0], state[1]] += 1
-
-  def plot_grid(self):
-      plt.figure()
-      plt.imshow(self.layout, vmin=-1, vmax=3)
-      plt.xticks([])
-      plt.yticks([])
-      plt.colorbar()
 
   def update_start_states(self, states):
       self.start_states = states
-      for agent in self.agents: agent.erase_memory()
-      # self.assign_tasks()
+      for agent in self.agents:
+          agent.erase_memory()
+
+  def distance(self, a, b):
+      return np.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
+
+  def check_assignments(self):
+      return [np.all(self.states[i] == self.agents[i].task) for i in range(len(self.states))]
 
   def reset_states(self):
       self.states = self.start_states
 
   def reset_layout(self):
-      # -1: wall
-      # 0: empty, episode continues
       if not self.IfGoal:
           self.layout = np.array([
             [-1, -1,  -1,  -1,  -1, -1, -1, -1, -1, -1, -1, -1, -1,  -1,  -1,  -1, -1, -1, -1, -1, -1],
@@ -153,7 +145,7 @@ class Inventory:
             [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
             [-1,  0,   0,  -1,  -1,  0, -1, -1, -1, -1,  0, -1, -1,  -1,  -1,   0, -1, -1,  0,  0, -1],
             [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
-            [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0, -1, -1,  0,  0, -1],
+            [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
             [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
             [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
             [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
@@ -192,7 +184,7 @@ class Inventory:
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
              [-1,  0,   0,  -1,  -1,  0, -1, -1, -1, -1,  0, -1, -1,  -1,  -1,   0, -1, -1,  0,  0, -1],
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
-             [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0, -1, -1,  0,  0, -1],
+             [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
              [-1,  0,   0,   0,   0,  1,  0,  0,  0,  0,  1,  0,  0,   0,   0,   1,  0,  0,  0,  0, -1],
              [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
@@ -220,13 +212,7 @@ class Inventory:
              [-1, -1,  -1,  -1,  -1, -1, -1, -1, -1, -1, -1, -1, -1,  -1,  -1,  -1, -1, -1, -1, -1, -1]
            ])
 
-  def distance(self, a, b):
-      return np.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
-
-  def check_assignments(self):
-      return [np.all(self.states[i] == self.agents[i].task) for i in range(len(self.states))]
-
-  def __getReward__(self):
+  def __getRewardandState__(self):
       self.rewards = []
       self.states_ = []
       def getStates(action, state):
@@ -243,11 +229,12 @@ class Inventory:
               new_state = (y, x)
           else:
               raise ValueError("Invalid action: {} is not 0, 1, 2, 3 or 4.".format(action))
-          if self.layout[new_state[0], new_state[1]] == -1:
+          new_y, new_x = new_state
+          if self.layout[new_y, new_x] == -1:
               new_state = (y, x, 'wall')
               if self.record_flag:
                   self.wall_crash += 1
-          self.states_.append(new_state)
+          return new_state
       def getReward(state, new_state, agent):
           try:
               new_y, new_x = new_state
@@ -302,27 +289,22 @@ class Inventory:
           reward -= 0.9 * self.distance(agent.task, new_state)
           return reward, new_state
       for i in range(len(self.agents)):
-          getStates(self.agents[i].action, self.states[i])
+          new_state = getStates(self.agents[i].action, self.states[i])
+          self.states_.append(new_state)
       self.states_stats = Counter()
       for state in self.states_:
           self.states_stats[state] += 1
-      self._states = self.states
       new_states = []
       for i in range(len(self.agents)):
-          reward, new_state = getReward(self._states[i], self.states_[i], self.agents[i])
-          if len(new_state) > 2:
-              new_states.append(new_state[:2])
-          else:
-              new_states.append(new_state)
+          reward, new_state = getReward(self.states[i], self.states_[i], self.agents[i])
+          new_states.append(new_state[:2])
           self.rewards.append(reward)
       self.states = new_states
       del new_states
 
   def __procudure__(self):
-      self.reset_layout()
       self.reset_states()
-      self.update_layout()
-      self.__getReward__()
+      self.__getRewardandState__()
       agents = self.agents.copy()
       for agent in self.agents:
           agent.__update__(agents, self.rewards)
