@@ -5,10 +5,6 @@ from matplotlib.animation import FuncAnimation, ArtistAnimation
 import matplotlib.animation as animation
 import matplotlib as mpl
 from matplotlib.patches import Patch
-import plotly.plotly as py
-import plotly.graph_objs as go
-from plotly.tools import FigureFactory as FF
-import pandas as pd
 from scipy.stats import *
 
 np.random.seed(2)
@@ -88,7 +84,7 @@ Algorithm = ['mean_field', 'joint_actions']
 Iters = 50
 Steps = 100
 maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
-experiments_times = 100
+experiments_times = 2
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}, {'num_finish': [], 'wall_crash': [], 'conflicts': []}]
 task_indice = np.random.choice(6, NumOfPlayers)
 for i in range(len(Algorithm)):
@@ -119,6 +115,8 @@ for i in range(len(Algorithm)):
                 experiments[i]['wall_crash'].append(env.wall_crash)
                 experiments[i]['conflicts'].append(env.conflicts)
                 break
+np.save('./mffp_exp3.npy', np.array([experiments[0]['num_finish'], experiments[0]['wall_crash'], experiments[0]['conflicts']]))
+np.save('./jsfp_exp3.npy', np.array([experiments[1]['num_finish'], experiments[1]['wall_crash'], experiments[1]['conflicts']]))
 ################################################################################
 # plt.show()
 # true_mus = {'num_finish': 50, 'wall_crash': 4, 'conflicts': 2}
