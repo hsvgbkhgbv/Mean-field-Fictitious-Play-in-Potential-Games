@@ -86,9 +86,9 @@ np.random.seed(2)
 NumOfPlayers = 60
 Algorithm = ['mean_field', 'joint_actions']
 Iters = 60
-Steps = 70
+Steps = 100
 maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
-experiments_times = 50
+experiments_times = 100
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': []}, {'num_finish': [], 'wall_crash': [], 'conflicts': []}]
 task_indice = np.random.choice(6, NumOfPlayers)
 for i in range(len(Algorithm)):
