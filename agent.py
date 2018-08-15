@@ -48,7 +48,6 @@ class Agent:
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(self.NumActions, self.NumActions)
             self.action = np.random.choice(self.NumActions)
-            # self.action = 0
             self.enermy_action_hist = np.zeros((self.NumActions, ), dtype=np.float32)
 
     def __update__(self, agents, rewards):
