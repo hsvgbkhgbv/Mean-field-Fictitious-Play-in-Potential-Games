@@ -15,8 +15,8 @@ class Agent:
             self.policy = np.random.rand(NumActions)
             self.policy = self.policy / np.sum(self.policy)
             self.action = np.random.choice(NumActions, p=self.policy)
-            self.C_alpha = 1
-            self.C_lambda = 1
+            self.C_alpha = 0.01
+            self.C_lambda = 0.01
             self.rho_pi = 0.48
             self.rho_lambda = 0.51
             self.rho_alpha = 1.
