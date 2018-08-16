@@ -1,10 +1,10 @@
-from env import *
+from env2 import *
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 # random seed(2)
 
-Algorithm = 'mean_field'
+Algorithm = 'average_sample'
 
 env = StrategyGame(Algorithm)
 actionsHistory = [[], []]
@@ -15,7 +15,7 @@ for iters in range(int(400)):
     actionsHistory[1].append(actions[1])
     print (actions)
 
-maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
+maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP', 'average_sample': 'AS'}
 
 plt.figure()
 plt.plot(actionsHistory[0], '.')

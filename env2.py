@@ -10,7 +10,7 @@ class SimpleCongestion:
     def __init__(self, NumRoad, NumAgents, agentType, roads):
         self.agentType = agentType
         self.roads = roads
-        self.agents = [Agent(NumRoad, self.agentType, i) for i in range(NumAgents)]
+        self.agents = [Agent(NumRoad, NumAgents, self.agentType, i) for i in range(NumAgents)]
 
     def costFunc(self):
         costs = []
@@ -44,7 +44,7 @@ class StrategyGame:
     def __init__(self, agentType):
         self.agentType = agentType
         self.payoffs = np.array([[(3, 3), (0, 4)], [(4, 0), (1, 1)]])
-        self.agents = [Agent(2, self.agentType, i) for i in range(2)]
+        self.agents = [Agent(2, 2, self.agentType, i) for i in range(2)]
 
     def __getReward__(self):
         self.rewards = self.payoffs[self.agents[0].action, self.agents[1].action]
@@ -94,7 +94,7 @@ class Inventory:
       self.agentType = agentType
       self.NumAgents = NumAgents
       self.actionNum = 5
-      self.agents = [Agent(self.actionNum, self.agentType, i) for i in range(NumAgents)]
+      self.agents = [Agent(self.actionNum, self.NumAgents, self.agentType, i) for i in range(NumAgents)]
       racks = [(5, 5), (5, 10), (5, 15), (11, 5), (11, 10), (11, 15)]
       self.tasks = []
       for num in taskIndice: self.tasks.append(racks[num])

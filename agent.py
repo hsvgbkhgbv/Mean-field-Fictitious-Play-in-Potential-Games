@@ -3,12 +3,13 @@ import numpy as np
 
 class Agent:
 
-    def __init__(self, NumActions, type, name):
+    def __init__(self, NumActions, NumAgents, type, name):
         self.name = name
         self.type = type
         self.t = 0
         self.task = 0
         self.NumActions = NumActions
+        self.NumAgents = NumAgents
         if self.type == 'actor_critic':
             self.Qj = np.random.rand(NumActions)
             self.policy = np.random.rand(NumActions)
@@ -30,9 +31,17 @@ class Agent:
             self.action = np.random.choice(NumActions)
             # self.action = 0
             self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.float32)
-            # self.best_response_hist = np.zeros((NumActions, ), dtype=np.float32)
             self.c = 0.1
             self.d = 0.03
+        elif self.type == 'vanilla':
+            self.action = np.random.choice(NumActions)
+            self.enermy_action_hist = np.zeros((NumAgents, NumActions), dtype=np.float32)
+        elif self.type == 'average_sample':
+            self.Qj = np.random.rand(NumActions)
+            self.action = np.random.choice(NumActions)
+            # self.action = 0
+            self.epsilon = 0.01
+            self.c = np.zeros((NumActions, ))
 
     def erase_memory(self):
         self.t = 0
@@ -49,6 +58,13 @@ class Agent:
             self.Qj = np.random.rand(self.NumActions, self.NumActions)
             self.action = np.random.choice(self.NumActions)
             self.enermy_action_hist = np.zeros((self.NumActions, ), dtype=np.float32)
+        elif self.type == 'vanilla':
+            self.action = np.random.choice(self.NumActions)
+            self.enermy_action_hist = np.zeros((self.NumAgents, self.NumActions), dtype=np.float32)
+        elif self.type == 'average_sample':
+            self.Qj = np.random.rand(self.NumActions)
+            self.action = np.random.choice(self.NumActions)
+            # self.action = 0
 
     def __update__(self, agents, rewards):
         if self.type == 'actor_critic':
@@ -73,9 +89,6 @@ class Agent:
                 DistrVec *= self.alpha
                 DistrVec[self.action] += (1 - self.alpha)
                 self.action = np.random.choice(self.Qj.shape[0], p=DistrVec)
-            else:
-                # print ('The last action is belonging to the current Best Response!')
-                pass
         elif self.type == 'mean_field':
             self.rho = 1 / (self.t + 1)**self.d
             self.alpha = 1 / (self.t + 1)**self.c
@@ -101,7 +114,12 @@ class Agent:
                 DistrVec *= self.alpha
                 DistrVec[self.action] += (1 - self.alpha)
                 self.action = np.random.choice(self.NumActions, p=DistrVec)
+        elif self.type == 'average_sample':
+            self.c[self.action] += 1
+            self.alpha = 1 / self.c[self.action]
+            self.Qj[self.action] = (1 - self.alpha) * self.Qj[self.action] + self.alpha * rewards[self.name]
+            if np.random.rand() < self.epsilon:
+                self.action = np.random.choice(self.NumActions)
             else:
-                # print ('The last action is belonging to the current Best Response!')
-                pass
+                self.action = np.argmax(self.Qj)
         self.t += 1

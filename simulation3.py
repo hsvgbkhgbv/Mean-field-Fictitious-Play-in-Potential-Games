@@ -8,7 +8,7 @@ from matplotlib.patches import Patch
 from scipy.stats import *
 
 
-maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
+maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP', 'average_sample': 'AF'}
 NumOfPlayers = 60
 np.random.seed(2)
 task_indice = np.random.choice(6, NumOfPlayers)
@@ -36,8 +36,9 @@ np.random.seed()
 # plt.legend()
 # plt.show()
 ################################################################################
-Algorithm = 'joint_actions'
-Iters = 50
+Algorithm = 'actor_critic'
+# Iters = 50
+Iters = 200
 Steps = 200
 env = Inventory(NumOfPlayers, Algorithm, IfSnippet=False, IfGoal=True, taskIndice=task_indice)
 frames = []

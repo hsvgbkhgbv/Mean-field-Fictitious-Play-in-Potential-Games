@@ -3,12 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 # random seed(2)
 
-np.random.seed(2)
-
 NumOfRoads = 10
 NumOfPlayers = 100
-Algorithm = 'joint_actions'
+Algorithm = 'average_sample'
+np.random.seed(2)
 roads = [np.random.rand(3) for _ in range(NumOfRoads)]
+np.random.seed()
 env = SimpleCongestion(NumOfRoads, NumOfPlayers, Algorithm, roads)
 costsHistory = []
 costsMean = []
@@ -17,12 +17,12 @@ roadsChoiceHistory = []
 for iters in range(200):
     costs, roadsChoice = env.__procudure__()
     costsHistory.append(costs)
-    print (roadsChoice)
-    print (np.sum(costs))
+    # print (roadsChoice)
+    # print (np.sum(costs))
     costsMean.append(np.sum(costsHistory)/(iters+1))
     roadsChoiceHistory.append(roadsChoice)
 
-maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'}
+maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP', 'average_sample': 'AS'}
 
 plt.figure()
 plt.plot(costsHistory)
