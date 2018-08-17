@@ -12,7 +12,7 @@ maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'
 NumOfPlayers = 60
 np.random.seed(2)
 task_indice = np.random.choice(6, NumOfPlayers)
-np.random.seed()
+# np.random.seed()
 ################################################################################
 # Algorithm = ['mean_field', 'joint_actions', 'actor_critic', 'average_sample']
 # rewardsHistory = [[], [], [], []]
@@ -91,7 +91,7 @@ np.random.seed()
 # ani.save(maplet[Algorithm]+'_dynamics'+str(NumOfPlayers)+'.mp4', writer=writer)
 ################################################################################
 Algorithm = ['mean_field', 'joint_actions']
-Iters = 10000
+Iters = 100
 Steps = 1000
 experiments_times = 100
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []},\
@@ -103,6 +103,8 @@ for i in range(len(Algorithm)):
         frames.append(env.layout_)
         print ('This is the experiment {}!'.format(exp))
         print(frames[-1])
+        experiments[i]['iters'].append([])
+        experiments[i]['rewards'].append([])
         for step in range(Steps):
             print ('Step {}'.format(step))
             last_rewards = np.zeros((NumOfPlayers, ))
@@ -112,9 +114,9 @@ for i in range(len(Algorithm)):
                     env.record_flag = True
                 rewards = env.__procudure__()
                 env.record_flag = False
-                if np.sum(np.abs(np.array(rewards) - last_rewards)) < 1e-4:
-                    experiments['iters'].append(iters)
-                    experiments['rewards'].append(np.sum(rewards))
+                if np.sum(np.abs(np.array(rewards) - last_rewards)) < 1e-2:
+                    experiments[i]['iters'][-1].append(iters)
+                    experiments[i]['rewards'][-1].append(np.sum(rewards))
                     break
                 last_rewards = np.array(rewards)
             env.update_layout()
@@ -130,8 +132,8 @@ for i in range(len(Algorithm)):
                 experiments[i]['wall_crash'].append(env.wall_crash)
                 experiments[i]['conflicts'].append(env.conflicts)
                 break
-np.save('./mffp_exp3.npy', np.array([experiments[0]['num_finish'], experiments[0]['wall_crash'], experiments[0]['conflicts'], experiments[0]['iters'], experiments[0]['rewards']]))
-np.save('./jsfp_exp3.npy', np.array([experiments[1]['num_finish'], experiments[1]['wall_crash'], experiments[1]['conflicts'], experiments[1]['iters'], experiments[1]['rewards']]))
+np.save('./mffp_exp3_seed.npy', np.array([experiments[0]['num_finish'], experiments[0]['wall_crash'], experiments[0]['conflicts'], experiments[0]['iters'], experiments[0]['rewards']]))
+np.save('./jsfp_exp3_seed.npy', np.array([experiments[1]['num_finish'], experiments[1]['wall_crash'], experiments[1]['conflicts'], experiments[1]['iters'], experiments[1]['rewards']]))
 ################################################################################
 # for name in experiments[0].keys():
 #     twosample_results = ttest_ind(experiments[0][name], experiments[1][name])

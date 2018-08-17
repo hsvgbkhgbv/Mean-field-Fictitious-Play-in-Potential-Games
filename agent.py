@@ -24,15 +24,15 @@ class Agent:
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
-            self.alpha = .15
-            self.rho = .12
+            self.alpha = .2
+            self.rho = .7
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(NumActions, NumActions)
             self.action = np.random.choice(NumActions)
             # self.action = 0
             self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.int32)
-            self.c = .09
-            self.d = 1e-4
+            self.c = .1
+            self.d = .03
         elif self.type == 'average_sample':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
