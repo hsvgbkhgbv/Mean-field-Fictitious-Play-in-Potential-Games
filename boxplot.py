@@ -12,13 +12,13 @@ jsfp = np.load('./jsfp_exp3.npy')
 
 data = [mffp[0], jsfp[0], mffp[1], jsfp[1], mffp[2], jsfp[2]]
 
-fig, ax1 = plt.subplots(3, 1, figsize=(16, 9))
+fig, ax1 = plt.subplots(3, 1, figsize=(25, 5))
 fig.canvas.set_window_title('A Boxplot of the Inventory Game')
 fig.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1)
-fig.suptitle('The Boxplot of Experiments Statistics', fontsize=20, fontweight='bold')
+fig.suptitle('The Boxplot of Experiments Statistics', fontsize=16, fontweight='bold')
 
 bp1 = ax1[0].boxplot(data[:2], notch=0, sym='+', vert=0, whis=1.5, positions=[0.07, 0.33])
-ax1[0].set_title(subtitle[0], loc='center', fontdict={'fontsize': 8, 'fontweight': 'bold'})
+ax1[0].set_title(subtitle[0], loc='center', fontdict={'fontsize': 6, 'fontweight': 'bold'})
 plt.setp(bp1['boxes'], color='black')
 plt.setp(bp1['whiskers'], color='black')
 plt.setp(bp1['fliers'], color='red', marker='+')
@@ -52,10 +52,11 @@ for i in range(numBoxes):
              color='w', marker='*', markeredgecolor='k')
 ax1[0].set_xlim([28, 100])
 ax1[0].set_ylim([-0.1, 0.5])
+ax1[0].tick_params(labelsize=6)
 plt.setp(ax1[0], yticks=[])
 
 bp2 = ax1[1].boxplot(data[2:4], notch=0, sym='+', vert=0, whis=1.5, positions=[0.07, 0.33])
-ax1[1].set_title(subtitle[1], loc='center', fontdict={'fontsize': 8, 'fontweight': 'bold'})
+ax1[1].set_title(subtitle[1], loc='center', fontdict={'fontsize': 6, 'fontweight': 'bold'})
 plt.setp(bp2['boxes'], color='black')
 plt.setp(bp2['whiskers'], color='black')
 plt.setp(bp2['fliers'], color='red', marker='+')
@@ -89,10 +90,11 @@ for i in range(numBoxes):
              color='w', marker='*', markeredgecolor='k')
 ax1[1].set_xlim([-2, 20])
 ax1[1].set_ylim([-0.1, 0.5])
+ax1[1].tick_params(labelsize=6)
 plt.setp(ax1[1], yticks=[])
 
 bp3 = ax1[2].boxplot(data[4:], notch=0, sym='+', vert=0, whis=1.5, positions=[0.07, 0.33])
-ax1[2].set_title(subtitle[2], loc='center', fontdict={'fontsize': 8, 'fontweight': 'bold'})
+ax1[2].set_title(subtitle[2], loc='center', fontdict={'fontsize': 6, 'fontweight': 'bold'})
 plt.setp(bp3['boxes'], color='black')
 plt.setp(bp3['whiskers'], color='black')
 plt.setp(bp3['fliers'], color='red', marker='+')
@@ -126,18 +128,19 @@ for i in range(numBoxes):
              color='w', marker='*', markeredgecolor='k')
 ax1[2].set_xlim([-5, 60])
 ax1[2].set_ylim([-0.1, 0.5])
+ax1[2].tick_params(labelsize=6)
 plt.setp(ax1[2], yticks=[])
 
 # Finally, add a basic legend
-fig.text(0.9, 0.02, 'Results of MFFP',
+fig.text(0.9, 0.03, 'Results of MFFP',
          backgroundcolor=boxColors[0], color='black', weight='roman',
-         size='x-small')
-fig.text(0.9, 0.04, 'Results of JSFP',
+         size='small')
+fig.text(0.84, 0.03, 'Results of JSFP',
          backgroundcolor=boxColors[1],
-         color='white', weight='roman', size='x-small')
-fig.text(0.9, 0.06, '*', color='white', backgroundcolor='k',
-         weight='roman', size='x-small')
-fig.text(0.905, 0.06, ' Average Value', color='black', weight='roman',
-         size='x-small')
+         color='white', weight='roman', size='small')
+fig.text(0.776, 0.03, '*', color='white', backgroundcolor='k',
+         weight='roman', size='small')
+fig.text(0.781, 0.03, ' Average Value', color='black', weight='roman',
+         size='small')
 
 plt.show()

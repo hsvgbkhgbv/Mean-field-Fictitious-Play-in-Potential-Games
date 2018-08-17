@@ -15,33 +15,30 @@ class Agent:
             self.policy = np.random.rand(NumActions)
             self.policy = self.policy / np.sum(self.policy)
             self.action = np.random.choice(NumActions, p=self.policy)
-            self.C_alpha = 0.01
-            self.C_lambda = 0.01
-            self.rho_pi = 0.48
-            self.rho_lambda = 0.51
-            self.rho_alpha = 1.
-            self.c = np.zeros((NumActions, ))
+            self.C_alpha = .01
+            self.C_lambda = .01
+            self.rho_pi = .1
+            self.rho_lambda = .55
+            self.rho_alpha = .7
+            self.c = np.zeros((NumActions, ), dtype=np.int32)
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
-            self.alpha = 0.2
-            self.rho = 0.7
+            self.alpha = .15
+            self.rho = .12
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(NumActions, NumActions)
             self.action = np.random.choice(NumActions)
             # self.action = 0
-            self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.float32)
-            self.c = 0.1
-            self.d = 0.03
-        elif self.type == 'vanilla':
-            self.action = np.random.choice(NumActions)
-            self.enermy_action_hist = np.zeros((NumAgents, NumActions), dtype=np.float32)
+            self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.int32)
+            self.c = .09
+            self.d = 1e-4
         elif self.type == 'average_sample':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
             # self.action = 0
-            self.epsilon = 0.01
-            self.c = np.zeros((NumActions, ))
+            self.epsilon = .1
+            self.c = np.zeros((NumActions, ), dtype=np.int32)
 
     def erase_memory(self):
         self.t = 0
@@ -50,7 +47,7 @@ class Agent:
             self.policy = np.random.rand(self.NumActions)
             self.policy = self.policy / np.sum(self.policy)
             self.action = np.random.choice(self.NumActions, p=self.policy)
-            self.c = np.zeros((self.NumActions, ))
+            self.c = np.zeros((self.NumActions, ), dtype=np.int32)
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(self.NumActions)
             self.action = np.random.choice(self.NumActions)
