@@ -15,11 +15,11 @@ class Agent:
             self.policy = np.random.rand(NumActions)
             self.policy = self.policy / np.sum(self.policy)
             self.action = np.random.choice(NumActions, p=self.policy)
-            self.C_alpha = .01
-            self.C_lambda = .01
-            self.rho_pi = .1
-            self.rho_lambda = .55
-            self.rho_alpha = .7
+            self.C_alpha = 1.
+            self.C_lambda = 1.
+            self.rho_pi = .498
+            self.rho_lambda = .501
+            self.rho_alpha = 1.
             self.c = np.zeros((NumActions, ), dtype=np.int32)
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(NumActions)
@@ -37,7 +37,7 @@ class Agent:
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
             # self.action = 0
-            self.epsilon = .1
+            self.epsilon = .3
             self.c = np.zeros((NumActions, ), dtype=np.int32)
 
     def erase_memory(self):
