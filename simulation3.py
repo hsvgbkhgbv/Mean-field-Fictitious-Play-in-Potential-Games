@@ -91,7 +91,7 @@ task_indice = np.random.choice(6, NumOfPlayers)
 # ani.save(maplet[Algorithm]+'_dynamics'+str(NumOfPlayers)+'.mp4', writer=writer)
 ################################################################################
 Algorithm = ['mean_field', 'joint_actions']
-Iters = 100
+Iters = 1000
 Steps = 1000
 experiments_times = 100
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []},\
@@ -107,23 +107,29 @@ for i in range(len(Algorithm)):
         experiments[i]['rewards'].append([])
         for step in range(Steps):
             print ('Step {}'.format(step))
-            last_rewards = np.zeros((NumOfPlayers, ))
+            last_mean_rewards = 0
             env.reset_layout()
             for iters in range(Iters):
                 if iters == Iters - 1:
                     env.record_flag = True
                 rewards = env.__procudure__()
+                mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
                 env.record_flag = False
-                if np.sum(np.abs(np.array(rewards) - last_rewards)) < 1e-2:
+                if np.abs(mean_rewards - last_mean_rewards) < .5:
+                    experiments[i]['iters'][-1].append(iters+1)
+                    experiments[i]['rewards'][-1].append(np.sum(rewards))
+                    print ('This is the iters num: {}'.format(iters+1))
+                    break
+                elif iters == Iters - 1:
                     experiments[i]['iters'][-1].append(iters)
                     experiments[i]['rewards'][-1].append(np.sum(rewards))
-                    break
-                last_rewards = np.array(rewards)
+                    print ('This is the iters num: {}'.format(iters))
+                last_mean_rewards = mean_rewards
             env.update_layout()
             frames.append(env.layout_)
             env.update_start_states(env.states)
             num_finish = sum(env.check_assignments())
-            print (frames[-1])
+            # print (frames[-1])
             print ('The number of successful assignments is {}.'.format(num_finish))
             print ('The number of wall crash is {}.'.format(env.wall_crash))
             print ('The number of conflicts is {}.\n'.format(env.conflicts))

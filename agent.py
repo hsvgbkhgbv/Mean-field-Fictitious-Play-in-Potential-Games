@@ -20,25 +20,25 @@ class Agent:
             self.rho_pi = .498
             self.rho_lambda = .501
             self.rho_alpha = 1.
-            self.c = np.zeros((NumActions, ), dtype=np.int32)
+            self.c = np.zeros((NumActions, ), dtype=np.float32)
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
-            self.alpha = .2
-            self.rho = .7
+            self.alpha = .55
+            self.rho = .73
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(NumActions, NumActions)
             self.action = np.random.choice(NumActions)
             # self.action = 0
-            self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.int32)
+            self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.float32)
             self.c = .1
             self.d = .03
         elif self.type == 'average_sample':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
             # self.action = 0
-            self.epsilon = .3
-            self.c = np.zeros((NumActions, ), dtype=np.int32)
+            self.epsilon = .1
+            self.c = np.zeros((NumActions, ), dtype=np.float32)
 
     def erase_memory(self):
         self.t = 0
@@ -89,13 +89,11 @@ class Agent:
         elif self.type == 'mean_field':
             self.rho = 1 / (self.t + 1)**self.d
             self.alpha = 1 / (self.t + 1)**self.c
-            self.m = len(agents) - 1
             enermy_actions = []
             for agent in agents:
                 if agent.name != self.name:
                     enermy_actions.append(agent.action)
-            partial_enermy_actions = np.random.choice(enermy_actions, self.m, replace=False)
-            enermy_action_curr = int(round(np.mean(partial_enermy_actions)))
+            enermy_action_curr = int(round(np.mean(enermy_actions)))
             self.enermy_action_hist[enermy_action_curr] += 1
             enermy_actions_prob = np.exp(self.enermy_action_hist - np.max(self.enermy_action_hist)) / np.sum(np.exp(self.enermy_action_hist - np.max(self.enermy_action_hist)))
             q = self.Qj.dot(enermy_actions_prob)
