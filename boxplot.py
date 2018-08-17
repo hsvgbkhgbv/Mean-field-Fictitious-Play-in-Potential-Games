@@ -7,8 +7,8 @@ subtitle = ['steps of completing tasks', 'number of wall crashes', 'number of co
 
 N = 100
 
-mffp = np.load('./mffp_exp3.npy')
-jsfp = np.load('./jsfp_exp3.npy')
+mffp = np.load('./mffp_exp3_seed.npy')
+jsfp = np.load('./jsfp_exp3_seed.npy')
 
 data = [mffp[0], jsfp[0], mffp[1], jsfp[1], mffp[2], jsfp[2]]
 
