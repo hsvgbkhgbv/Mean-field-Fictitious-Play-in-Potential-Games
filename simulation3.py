@@ -93,7 +93,7 @@ task_indice = np.random.choice(6, NumOfPlayers)
 Algorithm = ['mean_field', 'joint_actions']
 Iters = 1000
 Steps = 1000
-experiments_times = 1
+experiments_times = 100
 experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []},\
                 {'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []}]
 for i in range(len(Algorithm)):
