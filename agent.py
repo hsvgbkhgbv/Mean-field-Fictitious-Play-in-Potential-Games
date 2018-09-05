@@ -15,6 +15,7 @@ class Agent:
             self.policy = np.random.rand(NumActions)
             self.policy = self.policy / np.sum(self.policy)
             self.action = np.random.choice(NumActions, p=self.policy)
+            self.action = 0
             self.C_alpha = 1.
             self.C_lambda = 1.
             self.rho_pi = .498
@@ -24,20 +25,21 @@ class Agent:
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
-            self.alpha = .55
-            self.rho = .73
+            self.action = 0
+            self.alpha = .3
+            self.rho = .2
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(NumActions, NumActions)
             self.action = np.random.choice(NumActions)
-            # self.action = 0
+            self.action = 0
             self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.float32)
-            self.c = .1
-            self.d = .03
-        elif self.type == 'average_sample':
+            self.c = .05
+            self.d = .005
+        elif self.type == 'sample_average':
             self.Qj = np.random.rand(NumActions)
             self.action = np.random.choice(NumActions)
-            # self.action = 0
-            self.epsilon = .1
+            self.action = 0
+            self.epsilon = 0.1
             self.c = np.zeros((NumActions, ), dtype=np.float32)
 
     def erase_memory(self):
@@ -47,20 +49,25 @@ class Agent:
             self.policy = np.random.rand(self.NumActions)
             self.policy = self.policy / np.sum(self.policy)
             self.action = np.random.choice(self.NumActions, p=self.policy)
+            self.action = 0
             self.c = np.zeros((self.NumActions, ), dtype=np.int32)
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(self.NumActions)
             self.action = np.random.choice(self.NumActions)
+            self.action = 0
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(self.NumActions, self.NumActions)
             self.action = np.random.choice(self.NumActions)
+            self.action = 0
             self.enermy_action_hist = np.zeros((self.NumActions, ), dtype=np.float32)
         elif self.type == 'vanilla':
             self.action = np.random.choice(self.NumActions)
+            self.action = 0
             self.enermy_action_hist = np.zeros((self.NumAgents, self.NumActions), dtype=np.float32)
-        elif self.type == 'average_sample':
+        elif self.type == 'sample_average':
             self.Qj = np.random.rand(self.NumActions)
             self.action = np.random.choice(self.NumActions)
+            self.action = 0
             # self.action = 0
 
     def __update__(self, agents, rewards):
@@ -109,7 +116,7 @@ class Agent:
                 DistrVec *= self.alpha
                 DistrVec[self.action] += (1 - self.alpha)
                 self.action = np.random.choice(self.NumActions, p=DistrVec)
-        elif self.type == 'average_sample':
+        elif self.type == 'sample_average':
             self.c[self.action] += 1
             self.alpha = 1 / self.c[self.action]
             self.Qj[self.action] = (1 - self.alpha) * self.Qj[self.action] + self.alpha * rewards[self.name]

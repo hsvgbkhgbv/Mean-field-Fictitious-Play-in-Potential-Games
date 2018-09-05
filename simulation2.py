@@ -5,13 +5,13 @@ import matplotlib.pyplot as plt
 
 NumOfRoads = 10
 NumOfPlayers = 200
-Algorithm = ['average_sample', 'joint_actions', 'mean_field', 'actor_critic']
+Algorithm = ['sample_average', 'joint_actions', 'mean_field', 'actor_critic']
 np.random.seed(2)
 roads = [np.random.rand(3) for _ in range(NumOfRoads)]
 np.random.seed(2)
-costsHistory = {'average_sample': [], 'joint_actions': [], 'mean_field': [], 'actor_critic': []}
-costsMean = {'average_sample': [], 'joint_actions': [], 'mean_field': [], 'actor_critic': []}
-roadsChoiceHistory = {'average_sample': [], 'joint_actions': [], 'mean_field': [], 'actor_critic': []}
+costsHistory = {'sample_average': [], 'joint_actions': [], 'mean_field': [], 'actor_critic': []}
+costsMean = {'sample_average': [], 'joint_actions': [], 'mean_field': [], 'actor_critic': []}
+roadsChoiceHistory = {'sample_average': [], 'joint_actions': [], 'mean_field': [], 'actor_critic': []}
 
 for algorithm in Algorithm:
     env = SimpleCongestion(NumOfRoads, NumOfPlayers, algorithm, roads)
@@ -23,7 +23,7 @@ for algorithm in Algorithm:
         costsMean[algorithm].append(np.sum(costsHistory[algorithm])/(iters+1))
         roadsChoiceHistory[algorithm].append(roadsChoice)
 
-maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP', 'average_sample': 'AS'}
+maplet = {'joint_actions': 'JSFPI', 'actor_critic': 'ACGWFP', 'mean_field': 'MFFP', 'sample_average': 'SA'}
 
 # plt.figure()
 # plt.plot(costsHistory)
@@ -31,24 +31,29 @@ maplet = {'joint_actions': 'JSFP', 'actor_critic': 'ACWFP', 'mean_field': 'MFFP'
 # plt.xlabel('Day Number')
 # plt.ylabel('Congestion Cost on Each Route')
 
-fig, ax = plt.subplots(1, 4, figsize=(25, 5))
-fig.suptitle('The Plots of the Number of Cars on Each Road', fontsize=16, fontweight='bold')
-fig.subplots_adjust(left=0.03, right=0.97, top=0.9, bottom=0.1, wspace=.0)
+fig, ax = plt.subplots(1, 4, figsize=(30, 3))
+# fig.suptitle('The Plots of the Number of Cars on Each Road', fontsize=16, fontweight='bold')
+fig.subplots_adjust(left=0.046, right=1., top=.90, bottom=0.18, wspace=.0)
 for i in range(len(Algorithm)):
-    ax[i].plot(roadsChoiceHistory[Algorithm[i]])
-    ax[i].set_title(maplet[Algorithm[i]], loc='center', fontdict={'fontsize': 8, 'fontweight': 'bold'})
+    ax[i].plot(roadsChoiceHistory[Algorithm[i]], linewidth=2)
+    ax[i].set_title(maplet[Algorithm[i]], loc='center', fontdict={'fontsize': 16, 'fontweight': 'bold'})
+    ax[i].tick_params(labelsize=16)
+    ax[i].set_xlim([0, 550])
+    ax[i].set_ylim([-5, 60])
     if i > 0:
         plt.setp(ax[i], yticks=[])
-ax[0].set_ylabel('Number of Cars on Each Road')
-fig.text(0.5, 0.04, 'Day Number', va='center')
+ax[0].set_ylabel('Number of Cars on Each Road', fontsize=13)
+fig.text(0.5, 0.04, 'Day Number', va='center', fontsize=13)
 
-
-plt.figure()
-plt.title('The Plot of the Mean of Costs', fontsize=14, fontweight='bold')
-plt.xlabel('Day Number')
-plt.ylabel('Mean of Costs')
+fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+fig.subplots_adjust(left=0.15, right=.97, top=0.93, bottom=0.16, wspace=.0)
+# plt.title('The Plot of the Mean of Costs', fontsize=14, fontweight='bold')
+ax.set_xlabel('Day Number', fontsize=18)
+ax.set_ylabel('Mean of Costs', fontsize=18)
 for algorithm in Algorithm:
-    plt.plot(costsMean[algorithm], label=maplet[algorithm])
+    plt.plot(costsMean[algorithm], label=maplet[algorithm], linewidth=2.0)
+ax.set_xlim([0, 500])
+ax.tick_params(labelsize=16)
 plt.grid()
-plt.legend()
+ax.legend(fontsize=16)
 plt.show()
