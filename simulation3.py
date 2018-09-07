@@ -52,21 +52,24 @@ elif args.mode == 1:
     print (frames[-1])
     for step in range(Steps):
         print ('Step {}'.format(step))
-        last_rewards = np.zeros((NumOfPlayers, ))
+        last_mean_rewards = 0
         env.reset_layout()
         for iters in range(Iters):
             if iters == Iters - 1:
                 env.record_flag = True
             rewards = env.__procudure__()
+            mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
             env.record_flag = False
-            if np.sum(np.abs(np.array(rewards) - last_rewards)) < .5:
+            if np.abs(mean_rewards - last_mean_rewards) < .5:
+                print ('This is the iters num: {}'.format(iters+1))
                 break
-            last_rewards = np.array(rewards)
+            elif iters == Iters - 1:
+                print ('This is the iters num: {}'.format(iters+1))
+            last_mean_rewards = mean_rewards
         env.update_layout()
         frames.append(env.layout_)
         env.update_start_states(env.states)
         num_finish = sum(env.check_assignments())
-        print (frames[-1])
         print ('The number of successful assignments is {}.'.format(num_finish))
         print ('The number of wall crash is {}.'.format(env.wall_crash))
         print ('The number of conflicts is {}.\n'.format(env.conflicts))

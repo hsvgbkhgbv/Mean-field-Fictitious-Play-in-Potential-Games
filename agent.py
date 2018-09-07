@@ -14,7 +14,7 @@ class Agent:
             self.Qj = np.random.rand(NumActions)
             self.policy = np.random.rand(NumActions)
             self.policy = self.policy / np.sum(self.policy)
-            self.action = np.random.choice(NumActions, p=self.policy)
+            # self.action = np.random.choice(NumActions, p=self.policy)
             self.action = 0
             self.C_alpha = 1.
             self.C_lambda = 1.
@@ -24,20 +24,20 @@ class Agent:
             self.c = np.zeros((NumActions, ), dtype=np.float32)
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(NumActions)
-            self.action = np.random.choice(NumActions)
+            # self.action = np.random.choice(NumActions)
             self.action = 0
             self.alpha = .4
             self.rho = .5
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(NumActions, NumActions)
-            self.action = np.random.choice(NumActions)
+            # self.action = np.random.choice(NumActions)
             self.action = 0
             self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.float32)
             self.c = .1
             self.d = .005
         elif self.type == 'sample_average':
             self.Qj = np.random.rand(NumActions)
-            self.action = np.random.choice(NumActions)
+            # self.action = np.random.choice(NumActions)
             self.action = 0
             self.epsilon = 0.1
             self.c = np.zeros((NumActions, ), dtype=np.float32)
@@ -48,22 +48,22 @@ class Agent:
             self.Qj = np.random.rand(self.NumActions)
             self.policy = np.random.rand(self.NumActions)
             self.policy = self.policy / np.sum(self.policy)
-            self.action = np.random.choice(self.NumActions, p=self.policy)
-            # self.action = 0
+            # self.action = np.random.choice(self.NumActions, p=self.policy)
+            self.action = 0
             self.c = np.zeros((self.NumActions, ), dtype=np.int32)
         elif self.type == 'joint_actions':
             self.Qj = np.random.rand(self.NumActions)
-            self.action = np.random.choice(self.NumActions)
-            # self.action = 0
+            # self.action = np.random.choice(self.NumActions)
+            self.action = 0
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(self.NumActions, self.NumActions)
-            self.action = np.random.choice(self.NumActions)
-            # self.action = 0
+            # self.action = np.random.choice(self.NumActions)
+            self.action = 0
             self.enermy_action_hist = np.zeros((self.NumActions, ), dtype=np.float32)
         elif self.type == 'sample_average':
             self.Qj = np.random.rand(self.NumActions)
-            self.action = np.random.choice(self.NumActions)
-            # self.action = 0
+            # self.action = np.random.choice(self.NumActions)
+            self.action = 0
 
     def __update__(self, agents, rewards):
         if self.type == 'actor_critic':
