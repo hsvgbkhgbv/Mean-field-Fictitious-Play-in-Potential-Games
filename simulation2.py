@@ -18,21 +18,12 @@ for algorithm in Algorithm:
     for iters in range(500):
         costs, roadsChoice = env.__procudure__()
         costsHistory[algorithm].append(costs)
-        # print (roadsChoice)
-        # print (np.sum(costs))
         costsMean[algorithm].append(np.sum(costsHistory[algorithm])/(iters+1))
         roadsChoiceHistory[algorithm].append(roadsChoice)
 
 maplet = {'joint_actions': 'JSFPI', 'actor_critic': 'ACGWFP', 'mean_field': 'MFFP', 'sample_average': 'SA'}
 
-# plt.figure()
-# plt.plot(costsHistory)
-# plt.title('Game of {} Roads and {} Players with {}'.format(NumOfRoads, NumOfPlayers, maplet[Algorithm]))
-# plt.xlabel('Day Number')
-# plt.ylabel('Congestion Cost on Each Route')
-
 fig, ax = plt.subplots(1, 4, figsize=(30, 3))
-# fig.suptitle('The Plots of the Number of Cars on Each Road', fontsize=16, fontweight='bold')
 fig.subplots_adjust(left=0.046, right=1., top=.90, bottom=0.18, wspace=.0)
 for i in range(len(Algorithm)):
     ax[i].plot(roadsChoiceHistory[Algorithm[i]], linewidth=2)
@@ -47,7 +38,6 @@ fig.text(0.5, 0.04, 'Day Number', va='center', fontsize=13)
 
 fig, ax = plt.subplots(1, 1, figsize=(8, 4))
 fig.subplots_adjust(left=0.15, right=.97, top=0.93, bottom=0.16, wspace=.0)
-# plt.title('The Plot of the Mean of Costs', fontsize=14, fontweight='bold')
 ax.set_xlabel('Day Number', fontsize=18)
 ax.set_ylabel('Mean of Costs', fontsize=18)
 for algorithm in Algorithm:

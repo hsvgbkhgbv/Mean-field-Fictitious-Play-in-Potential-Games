@@ -2,7 +2,6 @@ from env2 import *
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-# random seed(2)
 
 Algorithm = ['sample_average', 'joint_actions', 'mean_field', 'actor_critic']
 actionsHistoryx = {'sample_average': [], 'joint_actions': [], 'mean_field': [], 'actor_critic': []}
@@ -40,17 +39,5 @@ for i in range(len(Algorithm)):
 ax[0][0].set_ylabel('Action of Player 1', fontsize=18)
 ax[1][0].set_ylabel('Action of Player 2', fontsize=18)
 fig.text(0.5, 0.018, 'Iters', va='center', fontsize=18)
-# fig.text()
 
 plt.show()
-# plt.figure()
-# plt.plot(actionsHistory[0], '.')
-# plt.title('Strategy Choice of Player {} with {}'.format(1, maplet[Algorithm]))
-# plt.xlabel('t')
-# plt.ylabel('action')
-# plt.figure()
-# plt.plot(actionsHistory[1], '.')
-# plt.title('Strategy Choice of Player {} with {}'.format(2, maplet[Algorithm]))
-# plt.xlabel('t')
-# plt.ylabel('action')
-# plt.show()
