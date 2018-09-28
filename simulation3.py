@@ -6,7 +6,7 @@ import matplotlib.animation as animation
 import matplotlib as mpl
 from matplotlib.patches import Patch
 import argparse
-np.random.seed(3)
+np.random.seed(2)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--mode', type=int, default=0)
@@ -46,6 +46,8 @@ elif args.mode == 1:
     Algorithm = mapping[args.algo]
     Iters = 1000
     Steps = 1000
+    conflicts = 0
+    wall_crash = 0
     env = Inventory(NumOfPlayers, Algorithm, IfSnippet=False, IfGoal=True, taskIndice=task_indice)
     frames = []
     frames.append(env.layout_)
@@ -55,24 +57,27 @@ elif args.mode == 1:
         last_mean_rewards = 0
         env.reset_layout()
         for iters in range(Iters):
-            if iters == Iters - 1:
-                env.record_flag = True
             rewards = env.__procudure__()
             mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
-            env.record_flag = False
-            if np.abs(mean_rewards - last_mean_rewards) < .5:
+            if np.abs(mean_rewards - last_mean_rewards) < .1:
                 print ('This is the iters num: {}'.format(iters+1))
                 break
             elif iters == Iters - 1:
                 print ('This is the iters num: {}'.format(iters+1))
+            else:
+                env.conflicts = 0
+                env.wall_crash = 0
             last_mean_rewards = mean_rewards
+        conflicts += env.conflicts
+        wall_crash += env.wall_crash
         env.update_layout()
+        print (env.layout_)
         frames.append(env.layout_)
         env.update_start_states(env.states)
         num_finish = sum(env.check_assignments())
         print ('The number of successful assignments is {}.'.format(num_finish))
-        print ('The number of wall crash is {}.'.format(env.wall_crash))
-        print ('The number of conflicts is {}.\n'.format(env.conflicts))
+        print ('The number of wall crash is {}.'.format(wall_crash))
+        print ('The number of conflicts is {}.'.format(conflicts))
         if num_finish == 60:
             break
     frames = frames[-1:]+frames
@@ -102,6 +107,8 @@ elif args.mode == 2:
     Algorithm = ['mean_field', 'joint_actions']
     Iters = 1000
     Steps = 1000
+    conflicts = 0
+    wall_crash = 0
     experiments_times = 100
     experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []},\
                     {'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []}]
@@ -117,11 +124,8 @@ elif args.mode == 2:
                 last_mean_rewards = 0
                 env.reset_layout()
                 for iters in range(Iters):
-                    if iters == Iters - 1:
-                        env.record_flag = True
                     rewards = env.__procudure__()
                     mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
-                    env.record_flag = False
                     if np.abs(mean_rewards - last_mean_rewards) < .5:
                         experiments[i]['iters'].append(iters+1)
                         experiments[i]['rewards'].append(np.sum(rewards))
@@ -131,18 +135,23 @@ elif args.mode == 2:
                         experiments[i]['iters'].append(iters+1)
                         experiments[i]['rewards'].append(np.sum(rewards))
                         print ('This is the iters num: {}'.format(iters+1))
+                    else:
+                        env.conflicts = 0
+                        env.wall_crash = 0
                     last_mean_rewards = mean_rewards
+                conflicts += env.conflicts
+                wall_crash += env.wall_crash
                 env.update_layout()
                 frames.append(env.layout_)
                 env.update_start_states(env.states)
                 num_finish = sum(env.check_assignments())
                 print ('The number of successful assignments is {}.'.format(num_finish))
-                print ('The number of wall crash is {}.'.format(env.wall_crash))
-                print ('The number of conflicts is {}.\n'.format(env.conflicts))
+                print ('The number of wall crash is {}.'.format(wall_crash))
+                print ('The number of conflicts is {}.\n'.format(conflicts))
                 if num_finish == 60:
                     experiments[i]['num_finish'].append(step)
-                    experiments[i]['wall_crash'].append(env.wall_crash)
-                    experiments[i]['conflicts'].append(env.conflicts)
+                    experiments[i]['wall_crash'].append(wall_crash)
+                    experiments[i]['conflicts'].append(conflicts)
                     break
     np.save('./mffp_exp3_iter.npy', np.array(experiments[0]['iters']))
     np.save('./jsfp_exp3_iter.npy', np.array(experiments[1]['iters']))

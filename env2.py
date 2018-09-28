@@ -68,12 +68,12 @@ goal: + 10
 '''
 class Inventory:
 
-  def __init__(self, NumAgents, agentType, IfSnippet, IfGoal, taskIndice):
+  def __init__(self, NumAgents, agentType, IfSnippet, IfGoal, taskIndice, record_flag=True):
       self.start_states = []
       self.IfGoal = IfGoal
       self.conflicts = 0
       self.wall_crash = 0
-      self.record_flag = False
+      self.record_flag = record_flag
       self.reset_layout()
       if IfSnippet:
           for _ in range(NumAgents):
@@ -240,13 +240,15 @@ class Inventory:
               new_y, new_x = new_state
           except:
               new_y, new_x, _ = new_state
-          if self.states_stats[new_state] == 1:
+          if self.states_stats[new_state] == 1: # no conflicts happen
               if self.layout[new_y, new_x] == 0:
                   if len(new_state) == 2:
                       if np.all(new_state == state): # keep stay
                           reward = - 1.
                       else: # move to a good pos
                           reward = 0.
+                          if self.states_stats[new_state+('wall',)] > 0:
+                              new_state = state
                   elif len(new_state) > 2: # wall
                       reward = - 7.
               elif self.layout[new_y, new_x] == 1:
@@ -291,6 +293,7 @@ class Inventory:
       for i in range(len(self.agents)):
           new_state = getStates(self.agents[i].action, self.states[i])
           self.states_.append(new_state)
+      # statistics of the states of all of agents
       self.states_stats = Counter()
       for state in self.states_:
           self.states_stats[state] += 1
