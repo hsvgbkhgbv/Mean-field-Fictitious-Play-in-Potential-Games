@@ -89,15 +89,15 @@ class Inventory:
               self.start_states.append(np.array([1, i+2]))
               self.start_states.append(np.array([15, i+2]))
       self.reset_states()
-      self.update_layout()
       self._number_of_states = np.prod(self.layout.shape)
       self.agentType = agentType
       self.NumAgents = NumAgents
       self.actionNum = 5
       self.agents = [Agent(self.actionNum, self.NumAgents, self.agentType, i) for i in range(NumAgents)]
-      racks = [(5, 5), (5, 10), (5, 15), (11, 5), (11, 10), (11, 15)]
+      self.racks = [(5, 5), (5, 10), (5, 15), (11, 5), (11, 10), (11, 15)]
+      self.update_layout()
       self.tasks = []
-      for num in taskIndice: self.tasks.append(racks[num])
+      for num in taskIndice: self.tasks.append(self.racks[num])
       self.assign_tasks()
 
   def assign_tasks(self):
@@ -117,6 +117,10 @@ class Inventory:
   def update_layout(self):
       for state in self.states:
           self.layout_[state[0], state[1]] += 1
+      for i in range(self.layout.shape[0]):
+          for j in range(self.layout.shape[1]):
+              if ((i, j) not in self.racks) and self.layout_[i, j] > 1:
+                  self.layout_[i, j] = 2
 
   def update_start_states(self, states):
       self.start_states = states
@@ -198,13 +202,13 @@ class Inventory:
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
              [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
-             [-1,  0,   0,   0,   0,  2,  0,  0,  0,  0,  2,  0,  0,   0,   0,   2,  0,  0,  0,  0, -1],
+             [-1,  0,   0,   0,   0,  3,  0,  0,  0,  0,  3,  0,  0,   0,   0,   3,  0,  0,  0,  0, -1],
              [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
              [-1,  0,   0,  -1,  -1,  0, -1, -1, -1, -1,  0, -1, -1,  -1,  -1,   0, -1, -1,  0,  0, -1],
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
              [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
-             [-1,  0,   0,   0,   0,  2,  0,  0,  0,  0,  2,  0,  0,   0,   0,   2,  0,  0,  0,  0, -1],
+             [-1,  0,   0,   0,   0,  3,  0,  0,  0,  0,  3,  0,  0,   0,   0,   3,  0,  0,  0,  0, -1],
              [-1,  0,   0,  -1,   0,  0,  0, -1, -1,  0,  0,  0, -1,  -1,   0,   0,  0, -1,  0,  0, -1],
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
              [-1,  0,   0,   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,   0,   0,   0,  0,  0,  0,  0, -1],
@@ -247,8 +251,8 @@ class Inventory:
                           reward = - 1.
                       else: # move to a good pos
                           reward = 0.
-                          if self.states_stats[new_state+('wall',)] > 0:
-                              new_state = state
+                          # if self.states_stats[new_state+('wall',)] > 0:
+                          #     new_state = state
                   elif len(new_state) > 2: # wall
                       reward = - 7.
               elif self.layout[new_y, new_x] == 1:
@@ -269,7 +273,7 @@ class Inventory:
                           reward = - 4.
                       else: # move to a good pos
                           reward = - 3.
-                      new_state = state
+                      # new_state = state
                       if self.record_flag:
                           self.conflicts += 1
                   elif len(new_state) > 2: # wall
@@ -283,7 +287,7 @@ class Inventory:
                               reward = - 9.
                           else: # move to a good pos
                               reward = - 8.
-                          new_state = state
+                          # new_state = state
                           if self.record_flag:
                               self.conflicts += 1
                       elif len(new_state) > 2: # wall

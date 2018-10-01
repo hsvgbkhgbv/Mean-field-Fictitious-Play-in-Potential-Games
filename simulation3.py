@@ -75,6 +75,7 @@ elif args.mode == 1:
         frames.append(env.layout_)
         env.update_start_states(env.states)
         num_finish = sum(env.check_assignments())
+        print ('It is the stats of states: \n {}'.format(env.states))
         print ('The number of successful assignments is {}.'.format(num_finish))
         print ('The number of wall crash is {}.'.format(wall_crash))
         print ('The number of conflicts is {}.'.format(conflicts))
@@ -88,18 +89,19 @@ elif args.mode == 1:
     plt.xticks([])
     plt.yticks([])
     plt.title('Inventory Game of {} Players with {}'.format(NumOfPlayers, maplet[Algorithm]))
-    cmap = plt.cm.get_cmap('tab20b', 4).colors
+    cmap = plt.cm.get_cmap('Accent', 5).colors
     legend_elements = [Patch(facecolor=cmap[0], edgecolor='k', label='Wall'),\
                        Patch(facecolor=cmap[1], edgecolor='k', label='Vacant Position'),\
                        Patch(facecolor=cmap[2], edgecolor='k', label='Position with 1 Agent'),\
-                       Patch(facecolor=cmap[3], edgecolor='k', label='Storage Rack')]
+                       Patch(facecolor=cmap[3], edgecolor='k', label='Position with Conflicts'),\
+                       Patch(facecolor=cmap[4], edgecolor='k', label='Storage Rack')]
     plt.legend(handles=legend_elements, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     t = 0
     def update(*args):
         global t
         if t == len(frames):
             t = 0
-        ax.imshow(frames[t], interpolation='nearest', vmin=-1, vmax=2, cmap='tab20b')
+        ax.imshow(frames[t], interpolation='nearest', vmin=-1, vmax=3, cmap=plt.cm.get_cmap('Accent', 5))
         t += 1
     ani = FuncAnimation(fig, update, frames=len(frames), interval=10)
     ani.save(maplet[Algorithm]+'_dynamics'+str(NumOfPlayers)+'.mp4', writer=writer)
