@@ -59,7 +59,7 @@ elif args.mode == 1:
         for iters in range(Iters):
             rewards = env.__procudure__()
             mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
-            if np.abs(mean_rewards - last_mean_rewards) < .1:
+            if np.abs(mean_rewards - last_mean_rewards) < .01:
                 print ('This is the iters num: {}'.format(iters+1))
                 break
             elif iters == Iters - 1:
@@ -75,7 +75,6 @@ elif args.mode == 1:
         frames.append(env.layout_)
         env.update_start_states(env.states)
         num_finish = sum(env.check_assignments())
-        print ('It is the stats of states: \n {}'.format(env.states))
         print ('The number of successful assignments is {}.'.format(num_finish))
         print ('The number of wall crash is {}.'.format(wall_crash))
         print ('The number of conflicts is {}.'.format(conflicts))
