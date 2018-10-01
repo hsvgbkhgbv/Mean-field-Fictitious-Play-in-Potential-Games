@@ -128,7 +128,7 @@ elif args.mode == 2:
                 for iters in range(Iters):
                     rewards = env.__procudure__()
                     mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
-                    if np.abs(mean_rewards - last_mean_rewards) < .5:
+                    if np.abs(mean_rewards - last_mean_rewards) < .1:
                         experiments[i]['iters'].append(iters+1)
                         experiments[i]['rewards'].append(np.sum(rewards))
                         print ('This is the iters num: {}'.format(iters+1))
