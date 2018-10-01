@@ -109,13 +109,13 @@ elif args.mode == 2:
     Algorithm = ['mean_field', 'joint_actions']
     Iters = 1000
     Steps = 1000
-    conflicts = 0
-    wall_crash = 0
     experiments_times = 100
     experiments = [{'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []},\
                     {'num_finish': [], 'wall_crash': [], 'conflicts': [], 'iters': [], 'rewards': []}]
     for i in range(len(Algorithm)):
         for exp in range(experiments_times):
+            conflicts = 0
+            wall_crash = 0
             env = Inventory(NumOfPlayers, Algorithm[i], IfSnippet=False, IfGoal=True, taskIndice=task_indice)
             frames = []
             frames.append(env.layout_)
