@@ -154,9 +154,9 @@ elif args.mode == 2:
                     experiments[i]['wall_crash'].append(wall_crash)
                     experiments[i]['conflicts'].append(conflicts)
                     break
-    np.save('./mffp_exp3_iter1.npy', np.array(experiments[0]['iters']))
-    np.save('./jsfp_exp3_iter1.npy', np.array(experiments[1]['iters']))
-    np.save('./mffp_exp3_seed1.npy', np.array([experiments[0]['num_finish'], experiments[0]['wall_crash'], experiments[0]['conflicts'], experiments[0]['rewards']]))
-    np.save('./jsfp_exp3_seed1.npy', np.array([experiments[1]['num_finish'], experiments[1]['wall_crash'], experiments[1]['conflicts'], experiments[1]['rewards']]))
+    np.save('./mffp_exp3_iter2.npy', np.array(experiments[0]['iters']))
+    np.save('./jsfp_exp3_iter2.npy', np.array(experiments[1]['iters']))
+    np.save('./mffp_exp3_seed2.npy', np.array([experiments[0]['num_finish'], experiments[0]['wall_crash'], experiments[0]['conflicts'], experiments[0]['rewards']]))
+    np.save('./jsfp_exp3_seed2.npy', np.array([experiments[1]['num_finish'], experiments[1]['wall_crash'], experiments[1]['conflicts'], experiments[1]['rewards']]))
 else:
     print ('Please input the correct mode from 0, 1 and 2!')
