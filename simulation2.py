@@ -1,4 +1,4 @@
-from env2 import *
+from env import *
 import numpy as np
 import matplotlib.pyplot as plt
 # random seed(2)
