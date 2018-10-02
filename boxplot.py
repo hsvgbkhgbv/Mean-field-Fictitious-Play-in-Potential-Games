@@ -5,11 +5,11 @@ from scipy.stats import *
 
 subtitle = ['number of steps to complete the task', 'number of iters to complete each situation']
 
-mffp = np.load('./mffp_exp3_seed.npy')
-jsfp = np.load('./jsfp_exp3_seed.npy')
+mffp = np.load('./mffp_exp3_seed1.npy')
+jsfp = np.load('./jsfp_exp3_seed1.npy')
 
-mffp_ = np.load('./mffp_exp3_iter.npy')
-jsfp_ = np.load('./jsfp_exp3_iter.npy')
+mffp_ = np.load('./mffp_exp3_iter1.npy')
+jsfp_ = np.load('./jsfp_exp3_iter1.npy')
 
 data = [mffp[0], jsfp[0], mffp_, jsfp_]
 
@@ -51,7 +51,7 @@ for i in range(numBoxes):
     # in the center of each box
     ax1[0].plot([np.average(data[:2][i])], [np.average(med.get_ydata())],
              color='w', marker='*', markeredgecolor='k')
-ax1[0].set_xlim([21, 135])
+ax1[0].set_xlim([35, 80])
 ax1[0].set_ylim([0, 0.4])
 ax1[0].tick_params(labelsize=16)
 plt.setp(ax1[0], yticks=[])
@@ -89,7 +89,7 @@ for i in range(numBoxes):
     # in the center of each box
     ax1[1].plot([np.average(data[2:4][i])], [np.average(med.get_ydata())],
              color='w', marker='*', markeredgecolor='k')
-ax1[1].set_xlim([-10, 103])
+ax1[1].set_xlim([200, 750])
 ax1[1].set_ylim([0, 0.4])
 ax1[1].tick_params(labelsize=16)
 plt.setp(ax1[1], yticks=[])
@@ -148,5 +148,9 @@ plt.show()
 
 twosample_results = ttest_ind(mffp[0], jsfp[0])
 print ('This is the results of steps: {}.'.format(twosample_results))
+twosample_results = ttest_ind(mffp[1], jsfp[1])
+print ('This is the results of wall crashes: {}.'.format(twosample_results))
+twosample_results = ttest_ind(mffp[2], jsfp[2])
+print ('This is the results of conflicts: {}.'.format(twosample_results))
 twosample_results = ttest_ind(mffp_, jsfp_)
 print ('This is the results of iters: {}.'.format(twosample_results))
