@@ -11,6 +11,7 @@ np.random.seed(2)
 parser = argparse.ArgumentParser()
 parser.add_argument('--mode', type=int, default=0)
 parser.add_argument('--algo', type=int, default=0)
+
 args = parser.parse_args()
 
 maplet = {'joint_actions': 'JSFPI', 'actor_critic': 'ACGWFP', 'mean_field': 'MFFP', 'sample_average': 'SA'}

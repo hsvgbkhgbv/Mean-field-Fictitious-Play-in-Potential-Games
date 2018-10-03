@@ -26,15 +26,15 @@ class Agent:
             self.Qj = np.random.rand(NumActions)
             # self.action = np.random.choice(NumActions)
             self.action = 0
-            self.alpha = .3
-            self.rho = .6
+            self.alpha = .5
+            self.rho = .7
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(NumActions, NumActions)
             # self.action = np.random.choice(NumActions)
             self.action = 0
             self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.float32)
-            self.c = .12
-            self.d = .001
+            self.c = .1
+            self.d = .03
         elif self.type == 'sample_average':
             self.Qj = np.random.rand(NumActions)
             # self.action = np.random.choice(NumActions)
