@@ -34,7 +34,7 @@ class Agent:
             self.action = 0
             self.enermy_action_hist = np.zeros((NumActions, ), dtype=np.float32)
             self.c = .1
-            self.d = .03
+            self.d = .001
         elif self.type == 'sample_average':
             self.Qj = np.random.rand(NumActions)
             # self.action = np.random.choice(NumActions)
