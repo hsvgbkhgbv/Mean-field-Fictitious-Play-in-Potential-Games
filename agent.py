@@ -26,8 +26,8 @@ class Agent:
             self.Qj = np.random.rand(NumActions)
             # self.action = np.random.choice(NumActions)
             self.action = 0
-            self.alpha = .5
-            self.rho = .7
+            self.alpha = .4
+            self.rho = .3
         elif self.type == 'mean_field':
             self.Qj = np.random.rand(NumActions, NumActions)
             # self.action = np.random.choice(NumActions)
