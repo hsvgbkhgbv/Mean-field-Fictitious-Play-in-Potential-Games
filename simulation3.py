@@ -60,7 +60,7 @@ elif args.mode == 1:
         for iters in range(Iters):
             rewards = env.__procudure__()
             mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
-            if np.abs(mean_rewards - last_mean_rewards) < .01:
+            if np.abs(mean_rewards - last_mean_rewards) < 1e-2:
                 print ('This is the iters num: {}'.format(iters+1))
                 break
             elif iters == Iters - 1:
@@ -128,7 +128,7 @@ elif args.mode == 2:
                 for iters in range(Iters):
                     rewards = env.__procudure__()
                     mean_rewards = last_mean_rewards + 1/(iters+1) * (np.sum(rewards) - last_mean_rewards)
-                    if np.abs(mean_rewards - last_mean_rewards) < .01:
+                    if np.abs(mean_rewards - last_mean_rewards) < 1e-2:
                         experiments[i]['iters'].append(iters+1)
                         experiments[i]['rewards'].append(np.sum(rewards))
                         print ('This is the iters num: {}'.format(iters+1))
@@ -155,9 +155,9 @@ elif args.mode == 2:
                     experiments[i]['wall_crash'].append(wall_crash)
                     experiments[i]['conflicts'].append(conflicts)
                     break
-    np.save('./mffp_exp3_iter2.npy', np.array(experiments[0]['iters']))
-    np.save('./jsfp_exp3_iter2.npy', np.array(experiments[1]['iters']))
-    np.save('./mffp_exp3_seed2.npy', np.array([experiments[0]['num_finish'], experiments[0]['wall_crash'], experiments[0]['conflicts'], experiments[0]['rewards']]))
-    np.save('./jsfp_exp3_seed2.npy', np.array([experiments[1]['num_finish'], experiments[1]['wall_crash'], experiments[1]['conflicts'], experiments[1]['rewards']]))
+    np.save('./mffp_exp3_iter1.npy', np.array(experiments[0]['iters']))
+    np.save('./jsfp_exp3_iter1.npy', np.array(experiments[1]['iters']))
+    np.save('./mffp_exp3_seed1.npy', np.array([experiments[0]['num_finish'], experiments[0]['wall_crash'], experiments[0]['conflicts'], experiments[0]['rewards']]))
+    np.save('./jsfp_exp3_seed1.npy', np.array([experiments[1]['num_finish'], experiments[1]['wall_crash'], experiments[1]['conflicts'], experiments[1]['rewards']]))
 else:
     print ('Please input the correct mode from 0, 1 and 2!')
