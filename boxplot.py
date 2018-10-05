@@ -5,11 +5,11 @@ from scipy.stats import *
 
 subtitle = ['number of steps to complete the task', 'number of iters to complete each situation']
 
-mffp = np.load('./mffp_exp3_seed2.npy')
-jsfp = np.load('./jsfp_exp3_seed2.npy')
+mffp = np.load('./mffp_exp3_seed3.npy')
+jsfp = np.load('./jsfp_exp3_seed3.npy')
 
-mffp_ = np.load('./mffp_exp3_iter2.npy')
-jsfp_ = np.load('./jsfp_exp3_iter2.npy')
+mffp_ = np.load('./mffp_exp3_iter3.npy')
+jsfp_ = np.load('./jsfp_exp3_iter3.npy')
 
 data = [mffp[0], jsfp[0], mffp_, jsfp_]
 
